@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contele Teams - Diagnóstico CS 2026</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <style>
+        :root {
+            --primary: #002d5b;
+            --secondary: #0056b3;
+            --accent: #00a8e8;
+            --bg: #f8fafc;
+            --white: #ffffff;
+            --text: #1e293b;
+            --danger: #ef4444;
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
+        * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+        body { margin: 0; font-family: 'Inter', 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); overflow: hidden; }
+
+        .slider { display: flex; width: 2100vw; height: 100vh; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        .slide { width: 100vw; height: 100vh; padding: 40px 80px; display: flex; flex-direction: column; position: relative; background: var(--bg); }
+
+        .logo { position: absolute; top: 25px; left: 40px; font-weight: 800; color: var(--primary); font-size: 1.2rem; letter-spacing: 1px; }
+        .page-counter { position: absolute; bottom: 25px; right: 40px; background: var(--primary); color: white; padding: 6px 16px; border-radius: 20px; font-weight: bold; font-size: 0.9rem; z-index: 10; }
+        
+        .nav { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); display: flex; gap: 20px; z-index: 100; }
+        button { background: var(--primary); color: white; border: none; padding: 12px 30px; border-radius: 50px; cursor: pointer; font-weight: bold; transition: 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        button:hover { background: var(--accent); transform: scale(1.05); }
+
+        h1 { font-size: 3rem; color: var(--primary); margin: 0; }
+        h2 { font-size: 2.2rem; color: var(--secondary); border-left: 8px solid var(--accent); padding-left: 20px; margin-bottom: 20px; }
+        h3 { font-size: 1.5rem; color: var(--primary); margin: 15px 0; }
+        p, li { font-size: 1.1rem; line-height: 1.6; color: #475569; }
+
+        .content-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; flex-grow: 1; align-items: start; min-height: 0; }
+        .chart-box { background: var(--white); padding: 25px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); height: 420px; width: 100%; position: relative; }
+        .analysis-card { background: var(--white); padding: 30px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border-top: 6px solid var(--accent); height: 100%; overflow-y: auto; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 1rem; background: white; }
+        th, td { padding: 12px; border: 1px solid #e2e8f0; text-align: left; }
+        th { background: var(--primary); color: white; font-weight: 600; }
+
+        .summary-box { background: #f1f5f9; padding: 20px; border-radius: 12px; margin-top: 15px; border-left: 5px solid var(--secondary); }
+        .tag { display: inline-block; padding: 4px 12px; border-radius: 6px; font-size: 0.85rem; font-weight: bold; margin-bottom: 10px; text-transform: uppercase; }
+        .tag-success { background: #dcfce7; color: #166534; }
+        .tag-danger { background: #fee2e2; color: #991b1b; }
+    </style>
+</head>
+<body>
+
+    <div class="logo">CONTELE TEAMS | PERFORMANCE ANALYTICS</div>
+    <div class="page-counter" id="pgNum">1 / 21</div>
+
+    <div class="slider" id="mainSlider">
+
+        <div class="slide" style="justify-content: center; align-items: center; text-align: center;">
+            <h1>Diagnóstico Estratégico de CS</h1>
+            <h3 style="color: var(--secondary);">Análise Trimestral de Performance e Retenção</h3>
+            <div style="width: 180px; height: 8px; background: var(--accent); margin: 30px 0;"></div>
+            <p style="max-width: 650px; font-size: 1.3rem;">Avaliação consolidada de Janeiro 2026 focada em Cristopher, Luana e Natália.</p>
+        </div>
+
+        <div class="slide">
+            <h2>📑 1. Análise Comparativa das Bases</h2>
+            <div class="analysis-card">
+                <p>As métricas de sucesso devem ser interpretadas sob a ótica da complexidade de cada carteira:</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>CS</th>
+                            <th>Perfil</th>
+                            <th>Clientes</th>
+                            <th>Licenças</th>
+                            <th>Média Lic./Cliente</th>
+                            <th>Taxa Churn (Clientes/mês)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Cristopher</td><td>VIP</td><td>164</td><td>2.391</td><td>≈14,5</td><td>0,81% (Baixa)</td></tr>
+                        <tr><td>Luana</td><td>Grandes Contas</td><td>115</td><td>4.603</td><td>≈40,0</td><td>1,74% (Média)</td></tr>
+                        <tr><td>Natália</td><td>Base Passiva</td><td>448</td><td>2.236</td><td>≈5,0</td><td>1,49% (Média)</td></tr>
+                    </tbody>
+                </table>
+                <div class="summary-box">
+                    <strong>Insight Estratégico:</strong> A base da Natália exige escala e automação, enquanto a carteira da Luana exige retenção técnica cirúrgica, pois cada perda impacta o faturamento de forma massiva.
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Estrutura de Gestão: Licenças Totais</h2>
+            <div class="content-layout">
+                <div class="chart-box"><canvas id="baseVolumeChart"></canvas></div>
+                <div class="analysis-card">
+                    <h3>Peso Financeiro das Carteiras</h3>
+                    <p>Este gráfico ilustra a responsabilidade de receita de cada CS:</p>
+                    <ul>
+                        <li><strong>Luana:</strong> Detém o maior volume (4.603 licenças). O churn aqui é de alto impacto financeiro. </li>
+                        <li><strong>Cristopher:</strong> Base estratégica de médio porte com 2.391 licenças. </li>
+                        <li><strong>Natália:</strong> Gerencia 2.236 licenças distribuídas em 448 clientes (maior volume operacional). </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Saúde da Base: Metas de Engajamento</h2>
+            <div class="content-layout">
+                <div class="chart-box"><canvas id="healthGoalChart"></canvas></div>
+                <div class="analysis-card">
+                    <h3>Compromisso com o Uso do Teams</h3>
+                    <div class="summary-box">
+                        <p><strong style="color:var(--danger);">Grandes Contas (Luana): Meta 100%.</strong> Atualmente em 59,4%. É o maior risco da operação hoje. </p>
+                        <p><strong style="color:var(--success);">VIP (Cristopher): Meta 90%+.</strong> Atingiu 94,9% em Janeiro. </p>
+                        <p><strong>Passiva (Natália): Meta 90%+.</strong> Estável em 88,3%. </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Tendência de Saúde: O Alerta GC</h2>
+            <div class="content-layout">
+                <div class="chart-box"><canvas id="healthTrendLine"></canvas></div>
+                <div class="analysis-card">
+                    <h3>Análise de Queda vs. Crescimento</h3>
+                    <p>O engajamento é o principal preditor de cancelamento:</p>
+                    <ul>
+                        <li><strong>Luana:</strong> Queda livre de 93,5% para 59,4% em 4 meses. </li>
+                        <li><strong>Cristopher:</strong> Recuperação brilhante, saindo de 88,5% para 94,9%. </li>
+                        <li><strong>Natália:</strong> Constância na base passiva, próxima da meta. </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>CSAT: Satisfação Percebida</h2>
+            <div class="content-layout">
+                <div class="chart-box"><canvas id="csatTrendLine"></canvas></div>
+                <div class="analysis-card">
+                    <h3>Qualidade do Atendimento</h3>
+                    <p><strong>Luana (100%):</strong> Alcançou a nota máxima em Janeiro. O suporte é excelente, mesmo com baixo uso do app.</p>
+                    <p><strong>Cristopher (78%):</strong> Única queda brusca. O excesso de tecnicismo pode estar gerando frieza.</p>
+                    <p><strong>Natália (94%):</strong> Mantém consistência admirável sob alto volume.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Nota IA: Excelência Técnica</h2>
+            <div class="content-layout">
+                <div class="chart-box"><canvas id="iaGradeBarChart"></canvas></div>
+                <div class="analysis-card">
+                    <h3>Benchmarking IA</h3>
+                    <p>Média de qualidade avaliada automaticamente:</p>
+                    <ul>
+                        <li><strong>Natália (9.48):</strong> Líder técnica. Impressionante manter essa nota com 341 atendimentos em Outubro.</li>
+                        <li><strong>Luana (9.39):</strong> Reflete o perfil consultivo "Premium".</li>
+                        <li><strong>Cristopher (9.31):</strong> Solidez em diagnóstico de causa raiz.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Natureza: Cristopher (VIP)</h2>
+            <div class="content-layout">
+                <div class="chart-box"><canvas id="natureCristopher"></canvas></div>
+                <div class="analysis-card">
+                    <h3>O Especialista Técnico</h3>
+                    <p><strong>Perfil:</strong> Equilíbrio entre Proatividade e Correção.</p>
+                    <ul>
+                        <li><strong>Bugs e Ajustes (37,7%):</strong> Foco em manter o sistema operando para os VIPs.</li>
+                        <li><strong>Proatividade (19%):</strong> Garante que o cliente sinta presença constante.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Natureza: Luana (GC)</h2>
+            <div class="content-layout">
+                <div class="chart-box"><canvas id="natureLuana"></canvas></div>
+                <div class="analysis-card">
+                    <h3>A Consultora de Instabilidades</h3>
+                    <p><strong>Perfil:</strong> Gestão de Crises e Configurações.</p>
+                    <ul>
+                        <li><strong>Bugs (22,4%):</strong> Concentra o maior volume de erros sistêmicos.</li>
+                        <li><strong>Ajustes Técnicos (20,8%):</strong> Esforço consultivo para adaptar o Teams à operação do cliente.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Natureza: Natália (Passiva)</h2>
+            <div class="content-layout">
+                <div class="chart-box"><canvas id="natureNatalia"></canvas></div>
+                <div class="analysis-card">
+                    <h3>A Ativadora de Base</h3>
+                    <p><strong>Perfil:</strong> Proatividade Extrema (Outbound).</p>
+                    <ul>
+                        <li><strong>Proatividade (47,1%):</strong> Metade do seu tempo é ativando clientes inativos.</li>
+                        <li><strong>Bugs (11,3%):</strong> Baixo índice de problemas técnicos complexos na base.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Produtividade: Reuniões Realizadas</h2>
+            <div class="content-layout">
+                <div class="chart-box"><canvas id="meetingsBarChart"></canvas></div>
+                <div class="analysis-card">
+                    <h3>Capacidade Operacional</h3>
+                    <p><strong>Natália:</strong> Dobro de reuniões em Janeiro (34 vs 18 do Cristopher), sustentando o volume de sua base.</p>
+                    <p><strong>Luana e Cristopher:</strong> Mantêm média de 29 videoconferências mensais, focando em alinhamentos estratégicos.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>👤 Cristopher David: O Especialista</h2>
+            <div class="content-layout">
+                <div class="analysis-card" style="border-top-color: var(--success);">
+                    <span class="tag tag-success">Fortalezas</span>
+                    <ul>
+                        <li>Líder em Saúde da Base (94,9% em Jan). </li>
+                        <li>Excelente diagnóstico de causa raiz em chats técnicos.</li>
+                        <li>Proatividade exemplar em migrações de sistemas.</li>
+                    </ul>
+                </div>
+                <div class="analysis-card" style="border-top-color: var(--danger);">
+                    <span class="tag tag-danger">Gaps de Melhoria</span>
+                    <ul>
+                        <li>Erros frequentes de digitação ("slecionar", "ssistema").</li>
+                        <li>Ignorar histórico da IA ao assumir chats. </li>
+                        <li>Encerramentos prematuros sem confirmação do cliente. </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>👤 Luana Mello: A Consultora</h2>
+            <div class="content-layout">
+                <div class="analysis-card" style="border-top-color: var(--success);">
+                    <span class="tag tag-success">Fortalezas</span>
+                    <ul>
+                        <li>Qualidade Consultiva Máxima (CSAT 100% em Jan).</li>
+                        <li>Entrega de materiais extras e dashboards personalizados. </li>
+                        <li>Empatia alta em momentos de instabilidade sistêmica.</li>
+                    </ul>
+                </div>
+                <div class="analysis-card" style="border-top-color: var(--danger);">
+                    <span class="tag tag-danger">Gaps de Melhoria</span>
+                    <ul>
+                        <li>Queda drástica na saúde da base (Risco de Churn). </li>
+                        <li>SLA de Resposta: Silêncios detectados de até 8 horas. </li>
+                        <li>Redundância de informações já fornecidas pelo cliente.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>👤 Natália Silveira: A Ativadora</h2>
+            <div class="content-layout">
+                <div class="analysis-card" style="border-top-color: var(--success);">
+                    <span class="tag tag-success">Fortalezas</span>
+                    <ul>
+                        <li>Maior volume processado com proatividade comercial (47%).</li>
+                        <li>Uso criativo de ferramentas como Looker Studio para agregar valor. </li>
+                        <li>Especialista em recuperação financeira e liberação de acesso.</li>
+                    </ul>
+                </div>
+                <div class="analysis-card" style="border-top-color: var(--danger);">
+                    <span class="tag tag-danger">Gaps de Melhoria</span>
+                    <ul>
+                        <li>Fadiga de Janeiro: Nota IA caiu para 7.82. </li>
+                        <li>Intervenções desnecessárias em chats já resolvidos pela IA.</li>
+                        <li>Atenção aos detalhes sob alta carga operacional.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Churn Financeiro: Licenças Perdidas</h2>
+            <div class="content-layout">
+                <div class="chart-box"><canvas id="churnLicBarChart"></canvas></div>
+                <div class="analysis-card">
+                    <h3>O Impacto Luana</h3>
+                    <p>Perder 4 clientes da Luana em Outubro custou <strong>184 licenças</strong>. </p>
+                    <p>O foco em Grandes Contas deve ser total na retenção, pois o impacto financeiro é desproporcional. </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Churn de Clientes: Rotatividade Unitária</h2>
+            <div class="content-layout">
+                <div class="chart-box"><canvas id="churnCliBarChart"></canvas></div>
+                <div class="analysis-card">
+                    <h3>Estabilidade VIP</h3>
+                    <p>Cristopher mantém a base mais estável (apenas 4 perdas no período). </p>
+                    <p>Natália lida com a rotatividade natural da base passiva (20 cancelamentos). </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>📈 5. Padrões da Equipe e Insights</h2>
+            <div class="analysis-card" style="border-color: var(--danger); text-align: center;">
+                <h3 style="color:var(--danger);">O Gap Comum: Histórico da IA</h3>
+                <p style="font-size: 1.3rem;">Detectado em <strong>toda a equipe</strong>: perguntar ao cliente o que ele já forneceu ao bot.</p>
+                <div class="summary-box">
+                    <p>Gera frustração imediata e sensação de suporte desatento.</p>
+                    <p><strong>Ação Trimestral:</strong> Zerar a redundância. Ler o histórico é o primeiro passo da interação humana.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Cases de Sucesso: Cultura de Gratidão</h2>
+            <div class="content-layout">
+                <div class="chart-box"><canvas id="casesBarChart"></canvas></div>
+                <div class="analysis-card">
+                    <h3>Feedback Positivo</h3>
+                    <p><strong>Natália</strong> lidera o registro de depoimentos de gratidão espontânea dos clientes. </p>
+                    <p>Cases são o reflexo da humanização e proximidade que geram retenção afetiva. </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>💡 Recomendações para a Diretoria</h2>
+            <div class="grid-3" style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:20px; width:100%; margin-top:20px;">
+                <div class="analysis-card">
+                    <h3>Cristopher</h3>
+                    <p>Focar em polidez e higiene de escrita para o público VIP. Manter o tecnicismo brilhante mas humanizar o tom.</p>
+                </div>
+                <div class="analysis-card">
+                    <h3>Luana</h3>
+                    <p>Plano de choque para recuperar Saúde da Base. O suporte é ótimo, mas o fit do produto nas GCs precisa de atenção.</p>
+                </div>
+                <div class="analysis-card">
+                    <h3>Natália</h3>
+                    <p>Focar em Qualidade vs. Volume. Monitorar sobrecarga de Janeiro para evitar erros de atenção.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Veredito do Trimestre: Melhor Desempenho</h2>
+            <div class="analysis-card" style="background: #f0fdf4; border-color: var(--success); text-align: center;">
+                <h3 style="color: var(--success);">Cristopher David</h3>
+                <p style="font-size: 1.3rem;">Considerando o equilíbrio entre Saúde e Retenção Financeira:</p>
+                <p><strong>Líder em Saúde (94,9%):</strong> É o único que mantém os clientes utilizando o Teams ativamente. </p>
+                <p><strong>Blindagem de Base:</strong> Menor churn proporcional à receita sob gestão. </p>
+                <p><em>Luana (Qualidade) e Natália (Volume) foram excelentes, mas a manutenção do uso do Cristopher garante a receita futura.</em></p>
+            </div>
+        </div>
+
+        <div class="slide" style="justify-content: center; align-items: center; text-align: center;">
+            <h1>Compromissos Trimestrais 2026</h1>
+            <div class="grid-3" style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:20px; width:100%; margin-top:50px;">
+                <div class="analysis-card"><h3>Leitura</h3><p>Zerar redundância após bot.</p></div>
+                <div class="analysis-card"><h3>Recuperação</h3><p>Levar Saúde GC para 85%+.</p></div>
+                <div class="analysis-card"><h3>Higiene</h3><p>Zerar erros de texto VIP.</p></div>
+            </div>
+            <br><p><strong>Sucesso do Cliente é Sucesso Contele Teams.</strong></p>
+        </div>
+
+    </div>
+
+    <div class="nav">
+        <button onclick="move(-1)">Anterior</button>
+        <button onclick="move(1)">Próximo</button>
+    </div>
+
+    <script>
+        Chart.register(ChartDataLabels);
+        let cur = 0; const total = 21;
+        const s = document.getElementById('mainSlider');
+        const p = document.getElementById('pgNum');
+
+        function move(d) {
+            cur += d; if (cur < 0) cur = 0; if (cur >= total) cur = total - 1;
+            s.style.transform = `translateX(-${cur * 100}vw)`;
+            p.innerText = `${cur + 1} / ${total}`;
+        }
+
+        document.addEventListener('keydown', (e) => { if (e.key === 'ArrowRight') move(1); if (e.key === 'ArrowLeft') move(-1); });
+
+        window.onload = function() {
+            const barOpt = { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, datalabels: { color: 'white', font: { weight: 'bold', size: 14 }, anchor: 'center', align: 'center' } }, scales: { y: { display: false }, x: { grid: { display: false } } } };
+            const lineOpt = { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' }, datalabels: { align: 'top', anchor: 'end', color: '#333', font: { weight: 'bold' } } }, scales: { y: { display: false }, x: { grid: { display: false }, border: { display: false } } } };
+
+            new Chart(document.getElementById('baseVolumeChart'), { type: 'bar', data: { labels: ['Cristopher', 'Luana', 'Natália'], datasets: [{ data: [2391, 4603, 2236], backgroundColor: ['#002855', '#0056b3', '#00a8e8'] }] }, options: barOpt });
+            new Chart(document.getElementById('healthGoalChart'), { type: 'bar', data: { labels: ['Luana (Meta 100)', 'Cristopher (Meta 90)', 'Natália (Meta 90)'], datasets: [{ data: [59.4, 94.9, 88.3], backgroundColor: ['#ef4444', '#10b981', '#f59e0b'] }] }, options: barOpt });
+            new Chart(document.getElementById('healthTrendLine'), { type: 'line', data: { labels: ['Out', 'Nov', 'Dez', 'Jan'], datasets: [ { label: 'Cristopher', data: [88.5, 90, 99.4, 94.9], borderColor: '#002855', tension: 0.1 }, { label: 'Luana', data: [93.5, 67.7, 64.5, 59.4], borderColor: '#ef4444', tension: 0.1 }, { label: 'Natália', data: [88.3, 85.8, 93, 88.3], borderColor: '#00a8e8', tension: 0.1 } ] }, options: lineOpt });
+            new Chart(document.getElementById('csatTrendLine'), { type: 'line', data: { labels: ['Out', 'Nov', 'Dez', 'Jan'], datasets: [ { label: 'Cristopher', data: [82, 91, 86, 78], borderColor: '#002855' }, { label: 'Luana', data: [77, 93, 90, 100], borderColor: '#10b981' }, { label: 'Natália', data: [89, 92, 91, 94], borderColor: '#00a8e8' } ] }, options: lineOpt });
+            new Chart(document.getElementById('iaGradeBarChart'), { type: 'bar', data: { labels: ['Cristopher', 'Luana', 'Natália'], datasets: [{ data: [9.31, 9.39, 9.48], backgroundColor: '#0056b3' }] }, options: barOpt });
+            
+            // Natureza (Corrigindo indefinido)
+            new Chart(document.getElementById('natureCristopher'), { type: 'bar', data: { labels: ['Proativo', 'Bugs', 'Ajuste', 'Follow-up'], datasets: [{ data: [19, 19, 18.7, 17.1], backgroundColor: '#002855' }] }, options: barOpt });
+            new Chart(document.getElementById('natureLuana'), { type: 'bar', data: { labels: ['Bugs', 'Proativo', 'Ajuste', 'Follow-up'], datasets: [{ data: [22.4, 21.9, 20.8, 12], backgroundColor: '#0056b3' }] }, options: barOpt });
+            new Chart(document.getElementById('natureNatalia'), { type: 'bar', data: { labels: ['Proativo', 'Bugs', 'Follow-up', 'Ajuste'], datasets: [{ data: [47.1, 11.3, 8.6, 8.2], backgroundColor: '#00a8e8' }] }, options: barOpt });
+
+            new Chart(document.getElementById('churnLicBarChart'), { type: 'bar', data: { labels: ['Cristopher', 'Luana', 'Natália'], datasets: [{ label: 'Licenças Out', data: [23, 184, 42], backgroundColor: ['#002855', '#ef4444', '#00a8e8'] }] }, options: barOpt });
+            new Chart(document.getElementById('churnCliBarChart'), { type: 'bar', data: { labels: ['Cristopher', 'Luana', 'Natália'], datasets: [{ data: [4, 6, 20], backgroundColor: '#1e293b' }] }, options: barOpt });
+            new Chart(document.getElementById('meetingsBarChart'), { type: 'bar', data: { labels: ['Cristopher', 'Luana', 'Natália'], datasets: [{ data: [29, 29, 34], backgroundColor: '#00a8e8' }] }, options: barOpt });
+            new Chart(document.getElementById('casesBarChart'), { type: 'bar', data: { labels: ['Cristopher', 'Luana', 'Natália'], datasets: [{ data: [4, 0, 8], backgroundColor: '#0056b3' }] }, options: barOpt });
+        };
+    </script>
+</body>
+</html>
+
